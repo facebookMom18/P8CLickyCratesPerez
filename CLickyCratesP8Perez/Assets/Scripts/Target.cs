@@ -14,6 +14,7 @@ public class Target : MonoBehaviour
     private float ySpawnPos;
 
     public int pointValue;
+    public ParticleSystem explosionParticle;
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +22,7 @@ public class Target : MonoBehaviour
         targetRb = GetComponent<Rigidbody>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         targetRb.AddForce (RandomForce(), ForceMode.Impulse);
-        targetRb.AddForce(RandomTourque(), RandomTourque(), RandomTourque(), ForceMode.Impulse);
+        targetRb.AddTorque(RandomTourque(), RandomTourque(), RandomTourque(), ForceMode.Impulse);
 
         transform.position = RandomSpawnPos();
     }
@@ -48,7 +49,8 @@ public class Target : MonoBehaviour
     private void OnMouseDown()
     {
         Destroy(gameObject);
-        gameManager.UpdateScore(2);
+        gameManager.UpdateScore(pointValue);
+        Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
     }
 
     private void OnTriggerEnter(Collider other)
